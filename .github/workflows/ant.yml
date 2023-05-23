@@ -41,5 +41,5 @@ jobs:
         tags: ${{github.run_number}}
         registry: docker.io
         dockerfile: dockerfile
-        username: ${{ secrets.DOCKERHYB_USUARIO }}
+        username: ${{ secrets.DOCKERHUB_USUARIO }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
