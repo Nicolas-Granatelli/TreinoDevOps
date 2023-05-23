@@ -1,0 +1,45 @@
+name: Java CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up JDK 11
+      uses: actions/setup-java@v3
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+    
+    - name: Compilar o Projeto
+      run: |
+        cd src
+        javac -cp . Main.java
+        javac -cp . Test.java
+
+    - name: Executar o Projeto Teste
+      run: |
+        cd src
+        java -cp . Test
+        
+    - name: Logondo tag
+      run: echo  "Oi ${{github.run_number}}"
+      
+      
+    - uses: mr-smithers-excellent/docker-build-push@v6
+      name: Deploy da Imagem Docker
+      with:
+        image:  nicolasgs/treinodevops
+        tags: ${{github.run_number}}
+        registry: docker.io
+        dockerfile: dockerfile
+        username: ${{ secrets.DOCKERHYB_USUARIO }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
